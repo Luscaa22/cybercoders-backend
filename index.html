@@ -62,7 +62,12 @@ transition:.3s
 button:hover{transform:scale(1.03)}
 .footer{text-align:center;margin-top:14px;font-size:11px;opacity:.7}
 .hidden{display:none}
-.thanks{display:none;flex-direction:column;align-items:center;text-align:center}
+.thanks{
+display:none;
+flex-direction:column;
+align-items:center;
+text-align:center
+}
 </style>
 </head>
 
@@ -111,7 +116,7 @@ Se presenciasse um membro cometendo racismo, xenofobia, bullying ou algo semelha
 </select>
 
 <div id="langs" class="hidden">
-<label id="l_langs">Se sim, quais?</label>
+<label id="l_langs">Se sim, quais linguagens?</label>
 <input type="text">
 </div>
 
@@ -134,13 +139,18 @@ Se presenciasse um membro cometendo racismo, xenofobia, bullying ou algo semelha
 </div>
 
 <script>
-const lang=document.getElementById("language")
-const prog=document.getElementById("prog")
-const langs=document.getElementById("langs")
+const form = document.getElementById("form")
+const formContainer = document.getElementById("formContainer")
+const thanks = document.getElementById("thanks")
+const prog = document.getElementById("prog")
+const langs = document.getElementById("langs")
+const lang = document.getElementById("language")
 
-prog.onchange=()=>langs.classList.toggle("hidden",prog.value!=="yes")
+prog.onchange = () => {
+  langs.classList.toggle("hidden", prog.value !== "yes")
+}
 
-const texts={
+const texts = {
 pt:{
 title:"Formulário de Administração",
 desc:"Preencha todas as informações com atenção.",
@@ -151,7 +161,7 @@ reason:"Por que deseja entrar na administração?",
 help:"De que forma você pretende contribuir com o servidor?",
 rules:"Se presenciasse um membro cometendo racismo, xenofobia, bullying ou algo semelhante, o que você faria?",
 prog:"Você possui conhecimento em alguma linguagem de programação?",
-langs:"Se sim, quais?",
+langs:"Se sim, quais linguagens?",
 exp:"Você já teve experiência como administrador ou moderador?",
 time:"Quanto tempo diário você pode dedicar ao servidor?",
 send:"Enviar formulário"
@@ -166,35 +176,70 @@ reason:"Why do you want to join the administration team?",
 help:"How do you plan to contribute to the server?",
 rules:"If you witnessed someone practicing racism, xenophobia or bullying, what would you do?",
 prog:"Do you have knowledge in any programming language?",
-langs:"If yes, which ones?",
+langs:"If yes, which languages?",
 exp:"Do you have previous experience as an admin or moderator?",
 time:"How much daily time can you dedicate to the server?",
 send:"Submit application"
 }
 }
 
-lang.onchange=()=>{
-const t=texts[lang.value]
-document.getElementById("title").innerText=t.title
-document.getElementById("desc").innerText=t.desc
-l_name.innerText=t.name
-l_age.innerText=t.age
-l_discord.innerText=t.discord
-l_reason.innerText=t.reason
-l_help.innerText=t.help
-l_rules.innerText=t.rules
-l_prog.innerText=t.prog
-l_langs.innerText=t.langs
-l_exp.innerText=t.exp
-l_time.innerText=t.time
-send.innerText=t.send
+lang.onchange = () => {
+const t = texts[lang.value]
+title.innerText = t.title
+desc.innerText = t.desc
+l_name.innerText = t.name
+l_age.innerText = t.age
+l_discord.innerText = t.discord
+l_reason.innerText = t.reason
+l_help.innerText = t.help
+l_rules.innerText = t.rules
+l_prog.innerText = t.prog
+l_langs.innerText = t.langs
+l_exp.innerText = t.exp
+l_time.innerText = t.time
+send.innerText = t.send
 }
 
-document.getElementById("form").onsubmit=e=>{
+form.addEventListener("submit", async (e) => {
 e.preventDefault()
-formContainer.style.display="none"
-thanks.style.display="flex"
+
+const elements = form.querySelectorAll("input, textarea, select")
+const fields = []
+
+elements.forEach(el => {
+  if (!el.value) return
+  if (el.id === "language") return
+
+  const label = el.previousElementSibling
+    ? el.previousElementSibling.innerText
+    : "Campo"
+
+  fields.push({
+    name: label,
+    value: el.value.toString().slice(0,1024),
+    inline: false
+  })
+})
+
+try {
+  const res = await fetch("https://vercel.com/luscaa22s-projects/cybercoders-backend", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ fields })
+  })
+
+  if (!res.ok) {
+    alert("Formulário fechado ou erro no envio.")
+    return
+  }
+
+  formContainer.style.display = "none"
+  thanks.style.display = "flex"
+
+} catch {
+  alert("Erro ao enviar o formulário.")
 }
+})
 </script>
 
 </body>
