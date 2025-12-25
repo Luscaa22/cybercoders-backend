@@ -1,256 +1,199 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>CyberCoders Studio | Administração</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberCoders | Application</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-* {
-  box-sizing: border-box;
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins}
+body{
+min-height:100vh;
+background:radial-gradient(circle at top,#4b1bff,#090015 60%);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#fff
 }
-
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: radial-gradient(circle at top, #3a0ca3, #0b061a);
-  color: #fff;
+.container{
+width:100%;
+max-width:440px;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(18px);
+border-radius:20px;
+padding:28px;
+box-shadow:0 0 40px rgba(140,80,255,.35);
+animation:fade .8s ease
 }
-
-header {
-  text-align: center;
-  padding: 30px 15px;
+@keyframes fade{from{opacity:0;transform:translateY(15px)}to{opacity:1}}
+.logo{text-align:center;margin-bottom:16px}
+.logo img{
+width:90px;height:90px;border-radius:50%;
+box-shadow:0 0 25px rgba(150,80,255,.7)
 }
-
-header img.logo {
-  width: 120px;
-  margin-bottom: 10px;
+h1{text-align:center;font-size:22px;margin-bottom:8px}
+p.desc{text-align:center;font-size:13px;opacity:.9;margin-bottom:20px}
+label{font-size:13px;margin-bottom:4px;display:block}
+input,textarea,select{
+width:100%;
+background:rgba(255,255,255,.12);
+border:none;
+outline:none;
+border-radius:12px;
+padding:12px;
+color:#fff;
+margin-bottom:14px
 }
-
-header h1 {
-  margin: 10px 0 5px;
-  color: #c77dff;
+textarea{resize:none;height:90px}
+select option{color:#000}
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:linear-gradient(90deg,#7f4bff,#b15cff);
+color:#fff;
+font-weight:600;
+font-size:15px;
+cursor:pointer;
+transition:.3s
 }
-
-header p {
-  color: #ccc;
-  font-size: 14px;
-}
-
-.banner {
-  width: 100%;
-  max-width: 900px;
-  margin: 20px auto;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 0 30px rgba(140,0,255,0.6);
-}
-
-.banner img {
-  width: 100%;
-  display: block;
-}
-
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-}
-
-.card {
-  background: rgba(20,10,40,0.9);
-  border-radius: 16px;
-  padding: 25px;
-  box-shadow: 0 0 25px rgba(140,0,255,0.5);
-}
-
-label {
-  display: block;
-  margin-top: 16px;
-  font-weight: 600;
-}
-
-input, textarea, select {
-  width: 100%;
-  margin-top: 6px;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: #1a0f33;
-  color: #fff;
-  outline: none;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 90px;
-}
-
-button {
-  width: 100%;
-  margin-top: 25px;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  background: linear-gradient(90deg, #7209b7, #b517ff);
-  color: #fff;
-  transition: 0.2s;
-}
-
-button:hover {
-  transform: scale(1.02);
-  opacity: 0.9;
-}
-
-.status {
-  margin-top: 15px;
-  text-align: center;
-  font-size: 14px;
-}
-
-footer {
-  text-align: center;
-  padding: 25px 10px;
-  color: #aaa;
-  font-size: 13px;
-}
-
-.hidden {
-  display: none;
-}
+button:hover{transform:scale(1.03)}
+.footer{text-align:center;margin-top:14px;font-size:11px;opacity:.7}
+.hidden{display:none}
+.thanks{display:none;flex-direction:column;align-items:center;text-align:center}
 </style>
 </head>
 
 <body>
 
-<header>
-  <img src="logo.png" class="logo">
-  <h1>CyberCoders Studio</h1>
-  <p>Formulário oficial para candidatura à administração</p>
-
-  <label style="max-width:200px;margin:15px auto 0;">Idioma / Language</label>
-  <select id="language" onchange="updateLanguage()">
-    <option value="pt">Português</option>
-    <option value="en">English</option>
-  </select>
-</header>
-
-<div class="banner">
-  <img src="banner.png">
+<div class="container" id="formContainer">
+<div class="logo">
+<img src="logo.png">
 </div>
 
-<div class="container">
-  <div class="card">
-    <form id="form">
+<h1 id="title">Formulário de Administração</h1>
+<p class="desc" id="desc">Preencha todas as informações com atenção.</p>
 
-      <label id="lName">Nome completo</label>
-      <input id="name" minlength="3" required>
+<label>Idioma / Language</label>
+<select id="language">
+<option value="pt">Português</option>
+<option value="en">English</option>
+</select>
 
-      <label id="lAge">Idade (mínimo 13 anos)</label>
-      <input id="age" type="number" min="13" required>
+<form id="form">
 
-      <label id="lDiscord">Usuário do Discord</label>
-      <input id="discord" minlength="3" required>
+<label id="l_name">Nome completo</label>
+<input type="text" required>
 
-      <label id="lWhy">Por que deseja entrar na administração do CyberCoders Studio?</label>
-      <textarea id="why" minlength="30" required></textarea>
+<label id="l_age">Idade</label>
+<input type="number" min="13" required>
 
-      <label id="lHelp">De que forma você pretende contribuir com o servidor?</label>
-      <textarea id="help" minlength="30" required></textarea>
+<label id="l_discord">Nick no Discord</label>
+<input type="text" required>
 
-      <label id="lSituation">
-        Caso presencie atitudes como racismo, xenofobia ou bullying, qual seria sua atitude?
-      </label>
-      <textarea id="situation" minlength="30" required></textarea>
+<label id="l_reason">Por que deseja entrar na administração?</label>
+<textarea required></textarea>
 
-      <label id="lKnow">Você possui conhecimento em alguma linguagem de programação?</label>
-      <select id="know" onchange="toggleLang()">
-        <option value="Não">Não</option>
-        <option value="Sim">Sim</option>
-      </select>
+<label id="l_help">De que forma você pretende contribuir com o servidor?</label>
+<textarea required></textarea>
 
-      <div id="langs" class="hidden">
-        <label id="lWhich">Quais linguagens?</label>
-        <input id="languages" minlength="2">
-      </div>
+<label id="l_rules">
+Se presenciasse um membro cometendo racismo, xenofobia, bullying ou algo semelhante, o que você faria?
+</label>
+<textarea required></textarea>
 
-      <button type="button" onclick="sendForm()">Enviar candidatura</button>
-    </form>
+<label id="l_prog">Você possui conhecimento em alguma linguagem de programação?</label>
+<select id="prog">
+<option value="no">Não</option>
+<option value="yes">Sim</option>
+</select>
 
-    <div class="status" id="status"></div>
-  </div>
+<div id="langs" class="hidden">
+<label id="l_langs">Se sim, quais?</label>
+<input type="text">
 </div>
 
-<footer>
-  Site by: LuscaaDevx
-</footer>
+<label id="l_exp">Você já teve experiência como administrador ou moderador?</label>
+<textarea required></textarea>
+
+<label id="l_time">Quanto tempo diário você pode dedicar ao servidor?</label>
+<input type="text" required>
+
+<button type="submit" id="send">Enviar formulário</button>
+</form>
+
+<div class="footer">Site by: LuscaaDevx</div>
+</div>
+
+<div class="container thanks" id="thanks">
+<div class="logo"><img src="logo.png"></div>
+<h2>Formulário enviado!</h2>
+<p>Aguarde a análise da equipe.</p>
+</div>
 
 <script>
-function toggleLang() {
-  document.getElementById("langs").classList.toggle(
-    "hidden",
-    document.getElementById("know").value !== "Sim"
-  )
+const lang=document.getElementById("language")
+const prog=document.getElementById("prog")
+const langs=document.getElementById("langs")
+
+prog.onchange=()=>langs.classList.toggle("hidden",prog.value!=="yes")
+
+const texts={
+pt:{
+title:"Formulário de Administração",
+desc:"Preencha todas as informações com atenção.",
+name:"Nome completo",
+age:"Idade",
+discord:"Nick no Discord",
+reason:"Por que deseja entrar na administração?",
+help:"De que forma você pretende contribuir com o servidor?",
+rules:"Se presenciasse um membro cometendo racismo, xenofobia, bullying ou algo semelhante, o que você faria?",
+prog:"Você possui conhecimento em alguma linguagem de programação?",
+langs:"Se sim, quais?",
+exp:"Você já teve experiência como administrador ou moderador?",
+time:"Quanto tempo diário você pode dedicar ao servidor?",
+send:"Enviar formulário"
+},
+en:{
+title:"Administration Application Form",
+desc:"Please fill out all fields carefully.",
+name:"Full name",
+age:"Age",
+discord:"Discord username",
+reason:"Why do you want to join the administration team?",
+help:"How do you plan to contribute to the server?",
+rules:"If you witnessed someone practicing racism, xenophobia or bullying, what would you do?",
+prog:"Do you have knowledge in any programming language?",
+langs:"If yes, which ones?",
+exp:"Do you have previous experience as an admin or moderator?",
+time:"How much daily time can you dedicate to the server?",
+send:"Submit application"
+}
 }
 
-function updateLanguage() {
-  const pt = language.value === "pt"
-
-  lName.innerText = pt ? "Nome completo" : "Full name"
-  lAge.innerText = pt ? "Idade (mínimo 13 anos)" : "Age (minimum 13 years old)"
-  lDiscord.innerText = pt ? "Usuário do Discord" : "Discord username"
-  lWhy.innerText = pt
-    ? "Por que deseja entrar na administração do CyberCoders Studio?"
-    : "Why do you want to join CyberCoders Studio administration?"
-  lHelp.innerText = pt
-    ? "De que forma você pretende contribuir com o servidor?"
-    : "How do you intend to contribute to the server?"
-  lSituation.innerText = pt
-    ? "Caso presencie atitudes como racismo, xenofobia ou bullying, qual seria sua atitude?"
-    : "If you witness racism, xenophobia or bullying, what would be your action?"
-  lKnow.innerText = pt
-    ? "Você possui conhecimento em alguma linguagem de programação?"
-    : "Do you have knowledge in any programming language?"
-  lWhich.innerText = pt ? "Quais linguagens?" : "Which languages?"
+lang.onchange=()=>{
+const t=texts[lang.value]
+document.getElementById("title").innerText=t.title
+document.getElementById("desc").innerText=t.desc
+l_name.innerText=t.name
+l_age.innerText=t.age
+l_discord.innerText=t.discord
+l_reason.innerText=t.reason
+l_help.innerText=t.help
+l_rules.innerText=t.rules
+l_prog.innerText=t.prog
+l_langs.innerText=t.langs
+l_exp.innerText=t.exp
+l_time.innerText=t.time
+send.innerText=t.send
 }
 
-async function sendForm() {
-  const status = document.getElementById("status")
-  status.innerText = "Enviando candidatura..."
-
-  if (age.value < 13) {
-    status.innerText = "Idade mínima permitida é 13 anos"
-    return
-  }
-
-  const res = await fetch("/api/submit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      fields: [
-        { name: "Nome", value: name.value },
-        { name: "Idade", value: age.value },
-        { name: "Discord", value: discord.value },
-        { name: "Motivação", value: why.value },
-        { name: "Contribuição", value: help.value },
-        { name: "Situação ética", value: situation.value },
-        { name: "Programação", value: know.value, inline: true },
-        { name: "Linguagens", value: languages.value || "Nenhuma", inline: true }
-      ]
-    })
-  })
-
-  if (res.status === 403) {
-    status.innerText = "O formulário encontra-se fechado no momento"
-    return
-  }
-
-  status.innerText = "Candidatura enviada com sucesso"
-  form.reset()
-  toggleLang()
+document.getElementById("form").onsubmit=e=>{
+e.preventDefault()
+formContainer.style.display="none"
+thanks.style.display="flex"
 }
 </script>
 
