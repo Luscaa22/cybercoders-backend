@@ -89,42 +89,36 @@ text-align:center
 
 <form id="form">
 
-<label id="l_name">Nome completo</label>
-<input type="text" required>
+<label id="l_name">Nome</label>
+<input id="name" type="text" minlength="3" required>
 
 <label id="l_age">Idade</label>
-<input type="number" min="13" required>
+<input id="age" type="number" min="13" required>
 
 <label id="l_discord">Nick no Discord</label>
-<input type="text" required>
+<input id="discord" type="text" minlength="3" required>
 
-<label id="l_reason">Por que deseja entrar na administração?</label>
-<textarea required></textarea>
+<label id="l_reason">Por que quer entrar na nossa administração</label>
+<textarea id="reason" minlength="15" required></textarea>
 
-<label id="l_help">De que forma você pretende contribuir com o servidor?</label>
-<textarea required></textarea>
+<label id="l_help">No que você vai contribuir com o servidor</label>
+<textarea id="help" minlength="15" required></textarea>
 
 <label id="l_rules">
-Se presenciasse um membro cometendo racismo, xenofobia, bullying ou algo semelhante, o que você faria?
+Se você visse um membro zaralhando o servidor, cometendo racismo, xenofobia, bullying, ou algo do tipo, o que você faria
 </label>
-<textarea required></textarea>
+<textarea id="rules" minlength="20" required></textarea>
 
-<label id="l_prog">Você possui conhecimento em alguma linguagem de programação?</label>
+<label id="l_prog">Você sabe alguma linguagem de programação ou alternativa</label>
 <select id="prog">
 <option value="no">Não</option>
 <option value="yes">Sim</option>
 </select>
 
 <div id="langs" class="hidden">
-<label id="l_langs">Se sim, quais linguagens?</label>
-<input type="text">
+<label id="l_langs">Se sim, qual ou quais</label>
+<input id="langsInput" type="text">
 </div>
-
-<label id="l_exp">Você já teve experiência como administrador ou moderador?</label>
-<textarea required></textarea>
-
-<label id="l_time">Quanto tempo diário você pode dedicar ao servidor?</label>
-<input type="text" required>
 
 <button type="submit" id="send">Enviar formulário</button>
 </form>
@@ -134,111 +128,88 @@ Se presenciasse um membro cometendo racismo, xenofobia, bullying ou algo semelha
 
 <div class="container thanks" id="thanks">
 <div class="logo"><img src="logo.png"></div>
-<h2>Formulário enviado!</h2>
-<p>Aguarde a análise da equipe.</p>
+<h2>Obrigado por enviar!</h2>
+<p>Aguarde a correção da equipe.</p>
 </div>
 
 <script>
-const form = document.getElementById("form")
-const formContainer = document.getElementById("formContainer")
-const thanks = document.getElementById("thanks")
-const prog = document.getElementById("prog")
-const langs = document.getElementById("langs")
-const lang = document.getElementById("language")
+const form=document.getElementById("form")
+const formContainer=document.getElementById("formContainer")
+const thanks=document.getElementById("thanks")
+const prog=document.getElementById("prog")
+const langs=document.getElementById("langs")
+const lang=document.getElementById("language")
+const title=document.getElementById("title")
+const desc=document.getElementById("desc")
+const l_name=document.getElementById("l_name")
+const l_age=document.getElementById("l_age")
+const l_discord=document.getElementById("l_discord")
+const l_reason=document.getElementById("l_reason")
+const l_help=document.getElementById("l_help")
+const l_rules=document.getElementById("l_rules")
+const l_prog=document.getElementById("l_prog")
+const l_langs=document.getElementById("l_langs")
+const send=document.getElementById("send")
 
-prog.onchange = () => {
-  langs.classList.toggle("hidden", prog.value !== "yes")
-}
+prog.onchange=()=>{langs.classList.toggle("hidden",prog.value!=="yes")}
 
-const texts = {
+const texts={
 pt:{
 title:"Formulário de Administração",
 desc:"Preencha todas as informações com atenção.",
-name:"Nome completo",
+name:"Nome",
 age:"Idade",
 discord:"Nick no Discord",
-reason:"Por que deseja entrar na administração?",
-help:"De que forma você pretende contribuir com o servidor?",
-rules:"Se presenciasse um membro cometendo racismo, xenofobia, bullying ou algo semelhante, o que você faria?",
-prog:"Você possui conhecimento em alguma linguagem de programação?",
-langs:"Se sim, quais linguagens?",
-exp:"Você já teve experiência como administrador ou moderador?",
-time:"Quanto tempo diário você pode dedicar ao servidor?",
+reason:"Por que quer entrar na nossa administração",
+help:"No que você vai contribuir com o servidor",
+rules:"Se você visse um membro zaralhando o servidor, cometendo racismo, xenofobia, bullying, ou algo do tipo, o que você faria",
+prog:"Você sabe alguma linguagem de programação ou alternativa",
+langs:"Se sim, qual ou quais",
 send:"Enviar formulário"
 },
 en:{
 title:"Administration Application Form",
-desc:"Please fill out all fields carefully.",
-name:"Full name",
+desc:"Fill in all information carefully.",
+name:"Name",
 age:"Age",
 discord:"Discord username",
-reason:"Why do you want to join the administration team?",
-help:"How do you plan to contribute to the server?",
-rules:"If you witnessed someone practicing racism, xenophobia or bullying, what would you do?",
-prog:"Do you have knowledge in any programming language?",
-langs:"If yes, which languages?",
-exp:"Do you have previous experience as an admin or moderator?",
-time:"How much daily time can you dedicate to the server?",
+reason:"Why do you want to join our administration",
+help:"How will you contribute to the server",
+rules:"If you saw a member disturbing the server, committing racism, xenophobia or bullying, what would you do",
+prog:"Do you know any programming language or alternative",
+langs:"If yes, which one(s)",
 send:"Submit application"
 }
 }
 
-lang.onchange = () => {
-const t = texts[lang.value]
-title.innerText = t.title
-desc.innerText = t.desc
-l_name.innerText = t.name
-l_age.innerText = t.age
-l_discord.innerText = t.discord
-l_reason.innerText = t.reason
-l_help.innerText = t.help
-l_rules.innerText = t.rules
-l_prog.innerText = t.prog
-l_langs.innerText = t.langs
-l_exp.innerText = t.exp
-l_time.innerText = t.time
-send.innerText = t.send
+lang.onchange=()=>{
+const t=texts[lang.value]
+title.innerText=t.title
+desc.innerText=t.desc
+l_name.innerText=t.name
+l_age.innerText=t.age
+l_discord.innerText=t.discord
+l_reason.innerText=t.reason
+l_help.innerText=t.help
+l_rules.innerText=t.rules
+l_prog.innerText=t.prog
+l_langs.innerText=t.langs
+send.innerText=t.send
 }
 
-form.addEventListener("submit", async (e) => {
+form.addEventListener("submit",async e=>{
 e.preventDefault()
-
-const elements = form.querySelectorAll("input, textarea, select")
-const fields = []
-
-elements.forEach(el => {
-  if (!el.value) return
-  if (el.id === "language") return
-
-  const label = el.previousElementSibling
-    ? el.previousElementSibling.innerText
-    : "Campo"
-
-  fields.push({
-    name: label,
-    value: el.value.toString().slice(0,1024),
-    inline: false
-  })
+if(parseInt(age.value)<13){alert("Idade mínima permitida é 13 anos.");return}
+const fields=[]
+form.querySelectorAll("input,textarea,select").forEach(el=>{
+if(!el.value||el.id==="language")return
+const label=el.previousElementSibling?el.previousElementSibling.innerText:"Campo"
+fields.push({name:label,value:el.value.slice(0,1024)})
 })
-
-try {
-  const res = await fetch("https://vercel.com/luscaa22s-projects/cybercoders-backend", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ fields })
-  })
-
-  if (!res.ok) {
-    alert("Formulário fechado ou erro no envio.")
-    return
-  }
-
-  formContainer.style.display = "none"
-  thanks.style.display = "flex"
-
-} catch {
-  alert("Erro ao enviar o formulário.")
-}
+const res=await fetch("/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields})})
+if(!res.ok){alert("Formulário fechado ou erro no envio.");return}
+formContainer.style.display="none"
+thanks.style.display="flex"
 })
 </script>
 
