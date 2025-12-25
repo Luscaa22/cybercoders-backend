@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>CyberCoders Studio | Admin Form</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #3a0ca3, #0b061a);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 95%;
+  max-width: 720px;
+  background: rgba(20,10,40,0.9);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow: 0 0 30px rgba(150,0,255,0.6);
+}
+
+h1 {
+  text-align: center;
+  color: #b517ff;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-top: 14px;
+  font-weight: bold;
+}
+
+input, textarea, select {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #1a0f33;
+  color: #fff;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, #7209b7, #b517ff);
+  color: #fff;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+.status {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 13px;
+  color: #aaa;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>CyberCoders Studio</h1>
+  <div class="subtitle">Admin Application Form</div>
+
+  <label>Language / Língua</label>
+  <select id="language" onchange="updateLanguage()">
+    <option value="pt">Português</option>
+    <option value="en">English</option>
+  </select>
+
+  <form id="form">
+    <label id="lblName">Nome</label>
+    <input id="name">
+
+    <label id="lblAge">Idade</label>
+    <input id="age">
+
+    <label id="lblDiscord">Nick no Discord</label>
+    <input id="discord">
+
+    <label id="lblWhy">Por que quer entrar na nossa administração?</label>
+    <textarea id="why"></textarea>
+
+    <label id="lblHelp">No que você vai contribuir com o servidor?</label>
+    <textarea id="help"></textarea>
+
+    <label id="lblPunish">
+      Se você visse racismo, xenofobia ou bullying, o que faria?
+    </label>
+    <textarea id="punish"></textarea>
+
+    <label id="lblKnow">Você sabe alguma linguagem de programação?</label>
+    <select id="knowLang" onchange="toggleLangField()">
+      <option value="Não">Não</option>
+      <option value="Sim">Sim</option>
+    </select>
+
+    <div id="langField" style="display:none;">
+      <label id="lblWhich">Quais?</label>
+      <input id="languages">
+    </div>
+
+    <button type="button" onclick="sendForm()">Enviar Formulário</button>
+  </form>
+
+  <div class="status" id="status"></div>
+
+  <footer>
+    Site by: LuscaaDevx
+  </footer>
+</div>
+
+<script>
+function toggleLangField() {
+  document.getElementById("langField").style.display =
+    document.getElementById("knowLang").value === "Sim" ? "block" : "none"
+}
+
+function updateLanguage() {
+  const pt = document.getElementById("language").value === "pt"
+
+  document.getElementById("lblName").innerText = pt ? "Nome" : "Name"
+  document.getElementById("lblAge").innerText = pt ? "Idade" : "Age"
+  document.getElementById("lblDiscord").innerText = pt ? "Nick no Discord" : "Discord Username"
+  document.getElementById("lblWhy").innerText = pt
+    ? "Por que quer entrar na nossa administração?"
+    : "Why do you want to join our administration?"
+  document.getElementById("lblHelp").innerText = pt
+    ? "No que você vai contribuir com o servidor?"
+    : "How will you contribute to the server?"
+  document.getElementById("lblPunish").innerText = pt
+    ? "Se você visse racismo, xenofobia ou bullying, o que faria?"
+    : "If you saw racism, xenophobia or bullying, what would you do?"
+  document.getElementById("lblKnow").innerText = pt
+    ? "Você sabe alguma linguagem de programação?"
+    : "Do you know any programming language?"
+  document.getElementById("lblWhich").innerText = pt ? "Quais?" : "Which ones?"
+}
+
+async function sendForm() {
+  const status = document.getElementById("status")
+  status.innerText = "Enviando..."
+
+  const res = await fetch("/api/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      fields: [
+        { name: "Nome", value: name.value || "N/A" },
+        { name: "Idade", value: age.value || "N/A" },
+        { name: "Discord", value: discord.value || "N/A" },
+        { name: "Motivo", value: why.value || "N/A" },
+        { name: "Contribuição", value: help.value || "N/A" },
+        { name: "Situação", value: punish.value || "N/A" },
+        { name: "Programação", value: knowLang.value, inline: true },
+        { name: "Linguagens", value: languages.value || "Nenhuma", inline: true }
+      ]
+    })
+  })
+
+  if (res.status === 403) {
+    status.innerText = "Formulário fechado"
+    return
+  }
+
+  status.innerText = "Formulário enviado com sucesso"
+  document.getElementById("form").reset()
+  document.getElementById("langField").style.display = "none"
+}
+</script>
+
+</body>
+</html>
