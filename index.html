@@ -73,10 +73,9 @@ text-align:center
 
 <body>
 
-<div class="container" id="formContainer">
-<div class="logo">
-<img src="logo.png">
-</div>
+<!-- FORMULÁRIO -->
+<div class="container hidden" id="formContainer">
+<div class="logo"><img src="logo.png"></div>
 
 <h1 id="title">Formulário de Administração</h1>
 <p class="desc" id="desc">Preencha todas as informações com atenção.</p>
@@ -126,6 +125,18 @@ Se você visse um membro zaralhando o servidor, cometendo racismo, xenofobia, bu
 <div class="footer">Site by: LuscaaDevx</div>
 </div>
 
+<!-- FORMULÁRIO FECHADO -->
+<div class="container hidden" id="closedContainer">
+<div class="logo"><img src="logo.png"></div>
+<h1>Formulário Fechado</h1>
+<p class="desc">
+O formulário de administração do <b>CyberCoders Studio</b> está fechado no momento.<br>
+Aguarde a abertura de novas vagas.
+</p>
+<div class="footer">Site by: LuscaaDevx</div>
+</div>
+
+<!-- OBRIGADO -->
 <div class="container thanks" id="thanks">
 <div class="logo"><img src="logo.png"></div>
 <h2>Obrigado por enviar!</h2>
@@ -135,82 +146,50 @@ Se você visse um membro zaralhando o servidor, cometendo racismo, xenofobia, bu
 <script>
 const form=document.getElementById("form")
 const formContainer=document.getElementById("formContainer")
+const closedContainer=document.getElementById("closedContainer")
 const thanks=document.getElementById("thanks")
 const prog=document.getElementById("prog")
 const langs=document.getElementById("langs")
-const lang=document.getElementById("language")
-const title=document.getElementById("title")
-const desc=document.getElementById("desc")
-const l_name=document.getElementById("l_name")
-const l_age=document.getElementById("l_age")
-const l_discord=document.getElementById("l_discord")
-const l_reason=document.getElementById("l_reason")
-const l_help=document.getElementById("l_help")
-const l_rules=document.getElementById("l_rules")
-const l_prog=document.getElementById("l_prog")
-const l_langs=document.getElementById("l_langs")
-const send=document.getElementById("send")
 
-prog.onchange=()=>{langs.classList.toggle("hidden",prog.value!=="yes")}
+prog.onchange=()=>langs.classList.toggle("hidden",prog.value!=="yes")
 
-const texts={
-pt:{
-title:"Formulário de Administração",
-desc:"Preencha todas as informações com atenção.",
-name:"Nome",
-age:"Idade",
-discord:"Nick no Discord",
-reason:"Por que quer entrar na nossa administração?",
-help:"No que você vai contribuir com o servidor?",
-rules:"Se você visse um membro zaralhando o servidor, cometendo racismo, xenofobia, bullying, ou algo do tipo, o que você faria?",
-prog:"Você sabe alguma linguagem de programação?",
-langs:"Se sim, qual ou quais",
-send:"Enviar formulário"
-},
-en:{
-title:"Administration Application Form",
-desc:"Fill in all information carefully.",
-name:"Name",
-age:"Age",
-discord:"Discord username",
-reason:"Why do you want to join our administration?",
-help:"How will you contribute to the server?",
-rules:"If you saw a member disturbing the server, committing racism, xenophobia or bullying, what would you do?",
-prog:"Do you know any programming language or alternative?",
-langs:"If yes, which one(s)?",
-send:"Submit application"
+async function checkFormStatus(){
+const res=await fetch("/api/submit",{method:"GET"})
+if(res.status===403||res.status===405){
+closedContainer.classList.remove("hidden")
+}else{
+formContainer.classList.remove("hidden")
 }
-}
-
-lang.onchange=()=>{
-const t=texts[lang.value]
-title.innerText=t.title
-desc.innerText=t.desc
-l_name.innerText=t.name
-l_age.innerText=t.age
-l_discord.innerText=t.discord
-l_reason.innerText=t.reason
-l_help.innerText=t.help
-l_rules.innerText=t.rules
-l_prog.innerText=t.prog
-l_langs.innerText=t.langs
-send.innerText=t.send
 }
 
 form.addEventListener("submit",async e=>{
 e.preventDefault()
 if(parseInt(age.value)<13){alert("Idade mínima permitida é 13 anos.");return}
+
 const fields=[]
 form.querySelectorAll("input,textarea,select").forEach(el=>{
 if(!el.value||el.id==="language")return
 const label=el.previousElementSibling?el.previousElementSibling.innerText:"Campo"
 fields.push({name:label,value:el.value.slice(0,1024)})
 })
-const res=await fetch("/api/submit",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields})})
-if(!res.ok){alert("Formulário fechado ou erro no envio.");return}
+
+const res=await fetch("/api/submit",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({fields})
+})
+
+if(!res.ok){
+formContainer.classList.add("hidden")
+closedContainer.classList.remove("hidden")
+return
+}
+
 formContainer.style.display="none"
 thanks.style.display="flex"
 })
+
+checkFormStatus()
 </script>
 
 </body>
