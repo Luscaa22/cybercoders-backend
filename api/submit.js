@@ -1,4 +1,8 @@
 export default async function handler(req, res) {
+  if (req.method === "GET") {
+    return res.json({ open: process.env.FORM_OPEN === "true" })
+  }
+
   if (req.method !== "POST") {
     res.status(405).end()
     return
