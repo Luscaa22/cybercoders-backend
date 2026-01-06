@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CyberCoders | Application</title>
+<title>CyberCoders | Tester Application</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -18,7 +18,7 @@ color:#fff
 }
 .container{
 width:100%;
-max-width:440px;
+max-width:500px;
 background:rgba(255,255,255,.08);
 backdrop-filter:blur(18px);
 border-radius:20px;
@@ -34,7 +34,7 @@ box-shadow:0 0 25px rgba(150,80,255,.7)
 }
 h1{text-align:center;font-size:22px;margin-bottom:8px}
 p.desc{text-align:center;font-size:13px;opacity:.9;margin-bottom:20px}
-label{font-size:13px;margin-bottom:4px;display:block}
+label{font-size:13px;margin-bottom:4px;display:block;font-weight:500}
 input,textarea,select{
 width:100%;
 background:rgba(255,255,255,.12);
@@ -68,6 +68,14 @@ flex-direction:column;
 align-items:center;
 text-align:center
 }
+.section-title{
+margin-top:20px;
+font-size:15px;
+font-weight:600;
+opacity:.9;
+margin-bottom:6px;
+text-decoration:underline;
+}
 </style>
 </head>
 
@@ -76,13 +84,13 @@ text-align:center
 <div class="container hidden" id="closed">
 <div class="logo"><img src="logo.png"></div>
 <h1>Formulário fechado</h1>
-<p class="desc">No momento o formulario está fechado, aguarde o proximo.</p>
+<p class="desc">No momento o formulário está fechado, aguarde o próximo.</p>
 </div>
 
 <div class="container hidden" id="formContainer">
 <div class="logo"><img src="logo.png"></div>
 
-<h1 id="title">Formulário de Administração CyberCoders </h1>
+<h1 id="title">Formulário de Testers CyberCoders</h1>
 <p class="desc" id="desc">Preencha todas as informações com atenção.</p>
 
 <label>Idioma / Language</label>
@@ -102,27 +110,33 @@ text-align:center
 <label id="l_discord">Nick no Discord</label>
 <input id="discord" type="text" minlength="3" required>
 
-<label id="l_reason">Por que quer entrar na nossa administração</label>
-<textarea id="reason" minlength="15" required></textarea>
+<!-- Seção 1: Experiência com scripts -->
+<div class="section-title">Experiência com Scripts</div>
+<label id="l_exp">Você já testou ou usou scripts do CyberCoders Studios? Como foi sua experiência?</label>
+<textarea id="exp" minlength="15" required></textarea>
 
-<label id="l_help">No que você vai contribuir com o servidor</label>
-<textarea id="help" minlength="15" required></textarea>
-
-<label id="l_rules">
-Se você visse um membro zaralhando o servidor, cometendo racismo, xenofobia, bullying, ou algo do tipo, o que você faria
-</label>
-<textarea id="rules" minlength="20" required></textarea>
-
-<label id="l_prog">Você sabe alguma linguagem de programação ou alternativa</label>
-<select id="prog">
+<!-- Seção 2: Técnico -->
+<div class="section-title">Técnica</div>
+<label id="l_tech">Você entende conceitos básicos de programação em Lua?</label>
+<select id="tech">
 <option value="no">Não</option>
 <option value="yes">Sim</option>
 </select>
 
-<div id="langs" class="hidden">
-<label id="l_langs">Se sim, qual ou quais</label>
-<input id="langsInput" type="text">
-</div>
+<!-- Seção 3: Disponibilidade -->
+<div class="section-title">Disponibilidade para Testes</div>
+<label id="l_time">Quantas horas por semana você pode dedicar a testar scripts?</label>
+<input id="time" type="text" required>
+
+<!-- Seção 4: Atenção a bugs -->
+<div class="section-title">Atenção a Bugs e Detalhes</div>
+<label id="l_bug">Como você reagiria se encontrasse um bug crítico no script?</label>
+<textarea id="bug" minlength="20" required></textarea>
+
+<!-- Seção 5: Feedback confiável -->
+<div class="section-title">Feedback Confiável</div>
+<label id="l_feedback">Como você documentaria ou reportaria problemas encontrados no script?</label>
+<textarea id="feedback" minlength="20" required></textarea>
 
 <button type="submit" id="send">Enviar formulário</button>
 </form>
@@ -133,7 +147,7 @@ Se você visse um membro zaralhando o servidor, cometendo racismo, xenofobia, bu
 <div class="container thanks" id="thanks">
 <div class="logo"><img src="logo.png"></div>
 <h2>Obrigado por enviar!</h2>
-<p>Aguarde a correção da equipe.</p>
+<p>Aguarde a análise da equipe.</p>
 </div>
 
 <script>
@@ -141,8 +155,6 @@ const form=document.getElementById("form")
 const formContainer=document.getElementById("formContainer")
 const thanks=document.getElementById("thanks")
 const closed=document.getElementById("closed")
-const prog=document.getElementById("prog")
-const langs=document.getElementById("langs")
 const lang=document.getElementById("language")
 
 const title=document.getElementById("title")
@@ -150,40 +162,38 @@ const desc=document.getElementById("desc")
 const l_name=document.getElementById("l_name")
 const l_age=document.getElementById("l_age")
 const l_discord=document.getElementById("l_discord")
-const l_reason=document.getElementById("l_reason")
-const l_help=document.getElementById("l_help")
-const l_rules=document.getElementById("l_rules")
-const l_prog=document.getElementById("l_prog")
-const l_langs=document.getElementById("l_langs")
+const l_exp=document.getElementById("l_exp")
+const l_tech=document.getElementById("l_tech")
+const l_time=document.getElementById("l_time")
+const l_bug=document.getElementById("l_bug")
+const l_feedback=document.getElementById("l_feedback")
 const send=document.getElementById("send")
-
-prog.onchange=()=>langs.classList.toggle("hidden",prog.value!=="yes")
 
 const texts={
 pt:{
-title:"Formulário de Administração",
+title:"Formulário de Testers CyberCoders",
 desc:"Preencha todas as informações com atenção.",
 name:"Nome",
 age:"Idade",
 discord:"Nick no Discord",
-reason:"Por que quer entrar na nossa administração",
-help:"No que você vai contribuir com o servidor",
-rules:"Se você visse um membro zaralhando o servidor, cometendo racismo, xenofobia, bullying, ou algo do tipo, o que você faria",
-prog:"Você sabe alguma linguagem de programação ou alternativa",
-langs:"Se sim, qual ou quais",
+exp:"Você já testou ou usou scripts do CyberCoders Studios?",
+tech:"Você entende conceitos básicos de programação ou Lua?",
+time:"Quantas horas por semana você pode dedicar a testar scripts?",
+bug:"Como você reagiria se encontrasse um bug crítico no script?",
+feedback:"Como você documentaria ou reportaria problemas encontrados no script?",
 send:"Enviar formulário"
 },
 en:{
-title:"Administration Application Form",
+title:"CyberCoders Testers Application",
 desc:"Fill in all information carefully.",
 name:"Name",
 age:"Age",
 discord:"Discord username",
-reason:"Why do you want to join our administration",
-help:"How will you contribute to the server",
-rules:"If you saw a member disturbing the server, committing racism, xenophobia or bullying, what would you do",
-prog:"Do you know any programming language or alternative",
-langs:"If yes, which one(s)",
+exp:"Have you ever tested or used scripts from CyberCoders Studios?",
+tech:"Do you understand basic programming concepts or Lua?",
+time:"How many hours per week can you dedicate to testing scripts?",
+bug:"How would you react if you found a critical bug in the script?",
+feedback:"How would you document or report issues found in the script?",
 send:"Submit application"
 }
 }
@@ -195,11 +205,11 @@ desc.innerText=t.desc
 l_name.innerText=t.name
 l_age.innerText=t.age
 l_discord.innerText=t.discord
-l_reason.innerText=t.reason
-l_help.innerText=t.help
-l_rules.innerText=t.rules
-l_prog.innerText=t.prog
-l_langs.innerText=t.langs
+l_exp.innerText=t.exp
+l_tech.innerText=t.tech
+l_time.innerText=t.time
+l_bug.innerText=t.bug
+l_feedback.innerText=t.feedback
 send.innerText=t.send
 }
 
